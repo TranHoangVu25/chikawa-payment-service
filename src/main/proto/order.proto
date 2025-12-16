@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package order;
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc";
+
+// =======================================
+//              ORDER SERVICE
+// =======================================
+service OrderService {
+
+  // Cart → Order
+  rpc CreateOrder (CartRequest) returns (OrderResponse);
+
+  // Payment → Order
+  rpc GetOrderSnapshot (GetOrderRequest) returns (OrderSnapshotResponse);
+
+  // Payment → Order (update status)
+  rpc UpdateOrderStatus (UpdateOrderStatusRequest)
+      returns (UpdateOrderStatusResponse);
+}
+
+// =======================================
+//              CART REQUEST
+// =======================================
+message CartRequest {
+  int32 userId = 1;
+  repeated CartItem items = 2;
+}
+
+message CartItem {
+  string id = 1;
+  string name = 2;
+  double price = 3;
+  int32 quantity = 4;
+  string image = 5;
+}
+
+// =======================================
+//              ORDER RESPONSE
+// =======================================
+message OrderResponse {
+  string orderId = 1;
+  string message = 2;
+}
+
+// =======================================
+//              PAYMENT REQUEST
+// =======================================
+message GetOrderRequest {
+  string orderId = 1;
+  int32 userId = 2;
+}
+
+message UpdateOrderStatusRequest {
+  string orderId = 1;
+  string status = 2;
+}
+
+message UpdateOrderStatusResponse {
+  bool success = 1;
+}
+
+// =======================================
+//              SNAPSHOT RESPONSE
+// =======================================
+message OrderSnapshotResponse {
+  string orderId = 1;
+  int32 userId = 2;
+  double totalPrice = 3;
+  string snapshotAt = 4;
+  repeated OrderItem items = 5;
+}
+
+message OrderItem {
+  string productId = 1;
+  string name = 2;
+  double price = 3;
+  int32 quantity = 4;
+}
