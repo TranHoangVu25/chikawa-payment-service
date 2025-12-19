@@ -19,4 +19,3 @@ public class GrpcClientConfig {
         return OrderServiceGrpc.newBlockingStub(channel);
     }
 }
-
