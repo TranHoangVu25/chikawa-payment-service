@@ -4,26 +4,29 @@ package order;
 
 option java_multiple_files = true;
 option java_package = "com.example.grpc";
+option java_outer_classname = "OrderProto";
 
 // =======================================
 //              ORDER SERVICE
 // =======================================
 service OrderService {
 
-  // Cart → Order
-  rpc CreateOrder (CartRequest) returns (OrderResponse);
+  // Cart Service -> Order Service
+  // Create order from cart
+  rpc CreateOrder (CartRequest)
+      returns (OrderResponse);
 
-  // Payment → Order
-  rpc GetOrderSnapshot (GetOrderRequest) returns (OrderSnapshotResponse);
-
-  // Payment → Order (update status)
-  rpc UpdateOrderStatus (UpdateOrderStatusRequest)
-      returns (UpdateOrderStatusResponse);
+  // Payment Service -> Order Service
+  // Get immutable snapshot for payment
+  rpc GetOrderSnapshot (GetOrderSnapshotRequest)
+      returns (OrderSnapshotResponse);
 }
 
+//
 // =======================================
-//              CART REQUEST
+//              CART (DO NOT CHANGE)
 // =======================================
+//
 message CartRequest {
   int32 userId = 1;
   repeated CartItem items = 2;
@@ -35,41 +38,42 @@ message CartItem {
   double price = 3;
   int32 quantity = 4;
   string image = 5;
+  string variantId = 6;
 }
 
+//
 // =======================================
-//              ORDER RESPONSE
+//              ORDER
 // =======================================
+//
 message OrderResponse {
   string orderId = 1;
   string message = 2;
 }
 
+//
 // =======================================
 //              PAYMENT REQUEST
 // =======================================
-message GetOrderRequest {
+//
+message GetOrderSnapshotRequest {
   string orderId = 1;
-  int32 userId = 2;
 }
 
-message UpdateOrderStatusRequest {
-  string orderId = 1;
-  string status = 2;
-}
-
-message UpdateOrderStatusResponse {
-  bool success = 1;
-}
-
+//
 // =======================================
-//              SNAPSHOT RESPONSE
+//              PAYMENT SNAPSHOT
 // =======================================
+//
 message OrderSnapshotResponse {
   string orderId = 1;
   int32 userId = 2;
   double totalPrice = 3;
+
+  // ISO-8601 format (UTC)
+  // Example: 2025-12-17T10:30:00Z
   string snapshotAt = 4;
+
   repeated OrderItem items = 5;
 }
 

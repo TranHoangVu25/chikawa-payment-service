@@ -22,8 +22,9 @@ public class StripeCheckoutService {
         SessionCreateParams.Builder params =
                 SessionCreateParams.builder()
                         .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("http://localhost:5173/")
-                        .setCancelUrl("https://frontend/payment/cancel")
+                        .setLocale(SessionCreateParams.Locale.EN)
+                        .setSuccessUrl("http://localhost:5173/payment/success")
+                        .setCancelUrl("http://localhost:5173/payment/success")
                         .putMetadata("orderId", order.getOrderId())
                         .putMetadata("userId", String.valueOf(order.getUserId()));
 

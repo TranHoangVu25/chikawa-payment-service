@@ -29,9 +29,7 @@ public class SecurityConfig {
     @Autowired
     CustomJwtDecoder customJwtDecoder;
 
-    // =========================================================
-    // 1️⃣ WEBHOOK FILTER CHAIN (PUBLIC - NO JWT AT ALL)
-    // =========================================================
+    // WEBHOOK FILTER CHAIN (PUBLIC - NO JWT AT ALL)
     @Bean
     @Order(1)
     public SecurityFilterChain webhookSecurity(HttpSecurity http) throws Exception {
@@ -43,19 +41,16 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 
-                // 🔥 CỰC KỲ QUAN TRỌNG
                 .oauth2ResourceServer(oauth2 -> oauth2.disable())
                 .securityContext(security -> security.disable())
                 .sessionManagement(session -> session.disable());
 
-        log.info("✅ Webhook SecurityFilterChain LOADED");
+        log.info("Webhook SecurityFilterChain LOADED");
 
         return http.build();
     }
 
-    // =========================================================
-    // 2️⃣ API FILTER CHAIN (JWT PROTECTED)
-    // =========================================================
+    // API FILTER CHAIN (JWT PROTECTED)
     @Bean
     @Order(2)
     public SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
@@ -78,14 +73,12 @@ public class SecurityConfig {
                                 )
                 );
 
-        log.info("✅ API SecurityFilterChain LOADED");
+        log.info("API SecurityFilterChain LOADED");
 
         return http.build();
     }
 
-    // =========================================================
-    // 3️⃣ JWT ROLE MAPPING
-    // =========================================================
+    // JWT ROLE MAPPING
     @Bean
     public JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
@@ -99,9 +92,7 @@ public class SecurityConfig {
         return converter;
     }
 
-    // =========================================================
-    // 4️⃣ BEARER TOKEN RESOLVER + FULL LOG
-    // =========================================================
+    // BEARER TOKEN RESOLVER + FULL LOG
     @Bean
     public BearerTokenResolver loggingBearerTokenResolver() {
 
@@ -118,9 +109,9 @@ public class SecurityConfig {
             log.info("Headers        : {}", Collections.list(request.getHeaderNames()));
             log.info("==================================");
 
-            // 🔥 ABSOLUTE BYPASS
+            //ABSOLUTE BYPASS
             if (request.getRequestURI().startsWith("/api/v1/webhook/")) {
-                log.info("🚀 WEBHOOK REQUEST - JWT BYPASSED");
+                log.info("WEBHOOK REQUEST - JWT BYPASSED");
                 return null;
             }
 

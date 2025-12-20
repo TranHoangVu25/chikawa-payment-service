@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: payment_service
+  data:
+    mongodb:
+      uri: mongodb://admin:123456@localhost:27017/order_service?authSource=admin
+server:
+  port: 8087
+
+grpc:
+  client:
+    orderService:
+      address: static://localhost:9090
+      negotiationType: plaintext
+
+jwt:
+  signerKey: "3m47O+gM3Sc0lc9I5pMhfGFZMoqvbFtLoNs6Lmq9nOg="
+
+stripe:
+  secret-key:
+  webhook-secret:
+

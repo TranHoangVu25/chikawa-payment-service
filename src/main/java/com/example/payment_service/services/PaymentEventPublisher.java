@@ -14,6 +14,7 @@ public class PaymentEventPublisher {
 
     private final RabbitTemplate rabbitTemplate;
 
+    //truyền data trong webhook về order_service
     public void publishPaymentSuccess(PaymentSuccessEvent event) {
         log.info("Payment Success Event ====: {}", event);
         rabbitTemplate.convertAndSend(
